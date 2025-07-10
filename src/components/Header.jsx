@@ -11,6 +11,7 @@ function Header() {
                 <NavLink to="/" className="text-white hover:text-gray-300" activeClassName="text-gray-300">Home</NavLink>
                 <NavLink to="/about" className="text-white hover:text-gray-300" activeClassName="text-gray-300">About</NavLink>
                 <NavLink to="/contact" className="text-white hover:text-gray-300" activeClassName="text-gray-300">Contact</NavLink>
+                <NavLink to="/recipe" className="text-white hover:text-gray-300" activeClassName="text-gray-300">Recipe</NavLink>
             </ul>
             </nav>
         </header>
