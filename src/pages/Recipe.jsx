@@ -155,7 +155,11 @@ function Recipe() {
     <Button
       size="sm"
       color="blue"
-      onClick={() => handleOpenRecipes(category)}
+      onClick={() => {
+        navigate(`/recipe/${category.strCategory.toLowerCase()}`);
+        setSelectedCategory(category);
+        setOpenRecipes(true);
+      }}
       className="flex items-center gap-2 rounded-full px-6 cursor-pointer"
     >
       See Recipes
