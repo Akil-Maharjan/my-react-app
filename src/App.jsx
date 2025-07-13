@@ -6,6 +6,8 @@ import Contact from "./pages/Contact/Contact";
 import RootLayout from "./components/RootLayout"; 
 import Recipe from './pages/Recipe';
 import NotFound from './pages/NotFound/NotFound';
+import Hooks from "./pages/hooks/Hooks";
+import UserForm from "./pages/user/UserForm";
 
 
 
@@ -31,13 +33,17 @@ function App() {
         {
           path: 'recipe',
           element: <Recipe />,
-        }
+        }, {
+      path: 'user-form',
+      element: <UserForm />
+    },
       ]
     },
     {
       path: 'recipe/:category',
       element: <Recipe />,
     },
+   
     {
       path: '*',
       element: <NotFound />,
@@ -49,6 +55,7 @@ function App() {
     <>
     
       <RouterProvider router={router} />
+       
   
       {/* <FlexLearning /> */}
 
