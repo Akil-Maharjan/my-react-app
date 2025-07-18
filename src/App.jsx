@@ -8,6 +8,8 @@ import Recipe from './pages/Recipe';
 import NotFound from './pages/NotFound/NotFound';
 import Hooks from "./pages/hooks/Hooks";
 import UserForm from "./pages/user/UserForm";
+import UserList from "./pages/user/UserList";
+
 
 
 
@@ -34,16 +36,23 @@ function App() {
           path: 'recipe',
           element: <Recipe />,
         }, {
-      path: 'user-form',
+      path: '/user-form',
       element: <UserForm />
     },
+     {
+      path: 'user-list',
+      element: <UserList />
+    }
       ]
     },
     {
       path: 'recipe/:category',
       element: <Recipe />,
     },
-   
+   {
+      path: 'user-form/:idx',
+      element: <UserForm />
+    },
     {
       path: '*',
       element: <NotFound />,
