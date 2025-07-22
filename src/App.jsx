@@ -6,9 +6,11 @@ import Contact from "./pages/Contact/Contact";
 import RootLayout from "./components/RootLayout"; 
 import Recipe from './pages/Recipe';
 import NotFound from './pages/NotFound/NotFound';
-import Hooks from "./pages/hooks/Hooks";
 import UserForm from "./pages/user/UserForm";
 import UserList from "./pages/user/UserList";
+import Article from "./articles/Article";
+import ArticleForm from "./articles/ArticleForm";
+
 
 
 
@@ -35,7 +37,16 @@ function App() {
         {
           path: 'recipe',
           element: <Recipe />,
-        }, {
+        },
+          {
+            path: '/articles',
+            element: <Article />
+          },
+          {
+            path: '/articles-form',
+            element: <ArticleForm />
+          },
+         {
       path: '/user-form',
       element: <UserForm />
     },
@@ -45,6 +56,10 @@ function App() {
     }
       ]
     },
+      {
+            path: 'articles/:id',
+            element: <Article />
+          },
     {
       path: 'recipe/:category',
       element: <Recipe />,

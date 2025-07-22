@@ -30,7 +30,7 @@ function UserList() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-200 flex flex-col items-center py-8">
+    <div style={{ fontFamily: 'Bitcount Single, Libre Baskerville, serif' }} className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-200 flex flex-col items-center py-8">
       <Typography variant="h3" color="blue-gray" className="mb-8 font-bold">
         Registered Users
       </Typography>
@@ -97,7 +97,7 @@ function UserList() {
                     onClick={() => navigate(`/user-form/${idx}`)}
                     className="mt-2"
                   >
-                    Edit
+                    <EditIcon />
                   </Button>
                   <Button
                     color="red"
