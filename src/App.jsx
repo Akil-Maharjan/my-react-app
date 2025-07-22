@@ -1,5 +1,5 @@
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom"; 
+import { createHashRouter, RouterProvider } from "react-router-dom"; 
 import Home from './pages/Home/Home';
 import About from "./pages/About/About";
 import Contact from "./pages/Contact/Contact";
@@ -16,7 +16,7 @@ import ArticleForm from "./articles/ArticleForm";
 
 
 function App() {
-  const router = createBrowserRouter([
+  const router = createHashRouter([
     {
      path: '/', // This is the root route
       element: <RootLayout />,
@@ -38,41 +38,40 @@ function App() {
           path: 'recipe',
           element: <Recipe />,
         },
+        {
+          path: 'recipe/:category',
+          element: <Recipe />,
+        },
           {
-            path: '/articles',
+            path: 'articles',
             element: <Article />
           },
           {
-            path: '/articles-form',
+            path: 'articles/:id',
+            element: <Article />
+          },
+          {
+            path: 'articles-form',
             element: <ArticleForm />
           },
          {
-      path: '/user-form',
+      path: 'user-form',
+      element: <UserForm />
+    },
+    {
+      path: 'user-form/:idx',
       element: <UserForm />
     },
      {
       path: 'user-list',
       element: <UserList />
-    }
-      ]
-    },
-      {
-            path: 'articles/:id',
-            element: <Article />
-          },
-    {
-      path: 'recipe/:category',
-      element: <Recipe />,
-    },
-   {
-      path: 'user-form/:idx',
-      element: <UserForm />
     },
     {
       path: '*',
       element: <NotFound />,
     },
-   
+      ]
+    }
   ]);
 
   return(
