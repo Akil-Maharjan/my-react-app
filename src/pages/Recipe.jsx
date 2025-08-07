@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // <-- Add this
 import {
   Card,
@@ -11,23 +11,27 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
+  Input,
 } from '@material-tailwind/react';
 
 function Recipe() {
+  
   const [categories, setCategories] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [openRecipes, setOpenRecipes] = useState(false);
   const [recipesLoading, setRecipesLoading] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [openRecipeDetail, setOpenRecipeDetail] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const params = useParams(); // <-- Get category from URL
   const navigate = useNavigate();
+  
 
+   
   // Fetch categories on mount
   useEffect(() => {
     const getCategories = async () => {
@@ -104,10 +108,6 @@ function Recipe() {
     }
   };
 
-  const filteredCategories = categories.filter((category) =>
-    category.strCategory.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   // Open recipe detail dialog
   const handleOpenRecipeDetail = (recipe) => {
     setSelectedRecipe(recipe);
@@ -119,57 +119,76 @@ function Recipe() {
     setSelectedRecipe(null);
   };
 
-  const renderCategories = () => (
-    <div className="container mx-auto p-4">
-     
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {filteredCategories.map((category) => (
-          <Card
-  key={category.idCategory}
-  className="w-full max-w-sm bg-white/30 backdrop-blur-md shadow-xl rounded-2xl border border-blue-100 hover:shadow-2xl transition transform hover:scale-105 duration-300"
->
-  <div className="relative overflow-hidden rounded-t-2xl">
-    <img
-      src={category.strCategoryThumb}
-      alt={category.strCategory}
-      className="h-48 w-full object-cover transition-transform duration-300 ease-in-out hover:scale-110"
-    />
-    <div className="absolute top-2 right-2 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold text-blue-700 shadow">
-      {category.strCategory}
-    </div>
-  </div>
-  <CardBody>
-    <Typography variant="h5" color="blue-gray" className="mb-2 font-bold">
-      {category.strCategory}
-    </Typography>
-    <Typography color="blue-gray" className="text-sm">
-      {category.strCategoryDescription &&
-      category.strCategoryDescription.length > 100 ? (
-        <ReadMore text={category.strCategoryDescription} maxLength={50} />
-      ) : (
-        category.strCategoryDescription || 'No description available.'
-      )}
-    </Typography>
-  </CardBody>
-  <CardFooter className="pt-0 flex">
-    <Button
-      size="sm"
-      color="blue"
-      onClick={() => {
-        navigate(`/recipe/${category.strCategory.toLowerCase()}`);
-        setSelectedCategory(category);
-        setOpenRecipes(true);
-      }}
-      className="flex items-center gap-2 rounded-full px-6 cursor-pointer"
-    >
-      See Recipes
-    </Button>
-  </CardFooter>
-</Card>
-        ))}
+  const renderCategories = () => {
+    const filteredCategories = categories.filter((category) =>
+      category.strCategory.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    return (
+      <div className="container mx-auto p-4">
+        <div className="mb-8 w-full md:w-1/2 lg:w-1/3 mx-auto">
+          <Input
+            label="Search for a recipe category..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            color="blue"
+          />
+        </div>
+        {filteredCategories.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {filteredCategories.map((category) => (
+              <Card
+                key={category.idCategory}
+                className="w-full max-w-sm bg-white/30 backdrop-blur-md shadow-xl rounded-2xl border border-blue-100 hover:shadow-2xl transition transform hover:scale-105 duration-300"
+              >
+                <div className="relative overflow-hidden rounded-t-2xl">
+                  <img
+                    src={category.strCategoryThumb}
+                    alt={category.strCategory}
+                    className="h-48 w-full object-cover transition-transform duration-300 ease-in-out hover:scale-110"
+                  />
+                  <div className="absolute top-2 right-2 bg-white/80 px-3 py-1 rounded-full text-xs font-semibold text-blue-700 shadow">
+                    {category.strCategory}
+                  </div>
+                </div>
+                <CardBody>
+                  <Typography variant="h5" color="blue-gray" className="mb-2 font-bold">
+                    {category.strCategory}
+                  </Typography>
+                  <Typography color="blue-gray" className="text-sm">
+                    {category.strCategoryDescription &&
+                    category.strCategoryDescription.length > 100 ? (
+                      <ReadMore text={category.strCategoryDescription} maxLength={50} />
+                    ) : (
+                      category.strCategoryDescription || 'No description available.'
+                    )}
+                  </Typography>
+                </CardBody>
+                <CardFooter className="pt-0 flex">
+                  <Button
+                    size="sm"
+                    color="blue"
+                    onClick={() => {
+                      navigate(`/recipe/${category.strCategory.toLowerCase()}`);
+                      setSelectedCategory(category);
+                      setOpenRecipes(true);
+                    }}
+                    className="flex items-center gap-2 rounded-full px-6 cursor-pointer"
+                  >
+                    See Recipes
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Typography color="blue-gray" className="text-center">
+            No categories found matching your search.
+          </Typography>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderRecipesDialog = () => (
     <Dialog open={openRecipes} handler={handleCloseRecipes} size="xl">
@@ -179,9 +198,10 @@ function Recipe() {
       <DialogBody>
         <div className="max-h-[70vh] overflow-y-auto pr-2">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {recipesLoading
-              ? Array.from({ length: 6 }).map((_, index) => <SkeletonLoader key={index} />)
-              : recipes.map((recipe) => (
+            {recipesLoading ? (
+              Array.from({ length: 6 }).map((_, index) => <SkeletonLoader key={index} footerAlign="center" />)
+            ) : (
+              recipes.map((recipe) => (
                 <Card
   key={recipe.idMeal}
   className="w-full max-w-sm bg-white/30 backdrop-blur-md shadow-xl rounded-2xl border border-blue-100 hover:shadow-2xl transition transform hover:scale-105 duration-300"
@@ -217,7 +237,8 @@ function Recipe() {
     </Button>
   </CardFooter>
 </Card>
-              ))}
+              ))
+            )}
           </div>
         </div>
       </DialogBody>
@@ -293,13 +314,19 @@ function Recipe() {
     </Dialog>
   );
 
-  return loading ? (
-    <div className="flex justify-center items-center min-h-screen">
-      <SkeletonLoader />
-    </div>
-  ) : error ? (
-    <div className="text-center text-red-600 mt-10">Error: {error.message}</div>
-  ) : (
+  if (loading) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {Array.from({ length: 12 }).map((_, index) => <SkeletonLoader key={index} />)}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) return <div className="text-center text-red-600 mt-10">Error: {error.message}</div>;
+
+  return (
     <>
       {renderCategories()}
       {selectedCategory && renderRecipesDialog()}
@@ -332,7 +359,7 @@ export const ReadMore = ({ text, maxLength }) => {
   );
 };
 
-export const SkeletonLoader = () => (
+export const SkeletonLoader = ({ footerAlign = 'start' }) => (
   <Card className="w-full max-w-sm animate-pulse shadow-none bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-100">
     <div className="h-48 bg-gray-200 w-full rounded-t-2xl"></div>
     <CardBody>
@@ -341,8 +368,8 @@ export const SkeletonLoader = () => (
       <div className="h-4 bg-gray-200 w-5/6 mb-1 rounded"></div>
       <div className="h-4 bg-gray-200 w-2/3 rounded"></div>
     </CardBody>
-    <CardFooter className="pt-0 flex justify-center">
-      <div className="bg-gray-200 h-8 w-20 rounded"></div>
+    <CardFooter className={`pt-0 flex ${footerAlign === 'center' ? 'justify-center' : ''}`}>
+      <div className="bg-gray-200 h-8 w-28 rounded-full"></div>
     </CardFooter>
   </Card>
 );

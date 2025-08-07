@@ -1,25 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { setUsersToLocalStorage, getUsersFromLocalStorage } from '../../local/local'
+import { getUserFromLocal, setUserToLocal } from '../../features/auth/local/local.js'
+
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    users: getUsersFromLocalStorage(),
+    users: getUserFromLocal() || [],
   },
   reducers: {
     addUser: (state, action) => {
       state.users.push(action.payload);
-      setUsersToLocalStorage(state.users);
+      setUserToLocal(state.users);
     },
     deleteUser: (state, action) => {
       state.users = state.users.filter(user => user.idx !== action.payload);
-      setUsersToLocalStorage(state.users);
+      setUserToLocal(state.users);
     },
     updateUser: (state, action) => {
       const index = state.users.findIndex(user => user.idx === action.payload.idx);
       if (index !== -1) {
         state.users[index] = action.payload;
-        setUsersToLocalStorage(state.users);
+        setUserToLocal(state.users);
       }
     }
   }

@@ -31,8 +31,23 @@ export const articlesApi = createApi({
         method: "POST",
       }),
       invalidatesTags: [{ type: 'Article', id: 'LIST' }],
-     })
+     }),
+     removeArticle: builder.mutation({
+      query: (id) => ({
+        url: `/articles/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [{ type: 'Article', id: 'LIST' }],
+    }),
+   updateArticle: builder.mutation({
+     query: ({ id, ...patch }) => ({
+       url: `/articles/${id}`,
+       method: "PUT",
+       body: patch,
+     }),
+     invalidatesTags: (result, error, { id }) => [{ type: 'Article', id }],
+   }),
   }),
 });
 
-export const { useGetArticlesQuery, useGetArticleByIdQuery, useAddArticleMutation, useLazyGetArticleByIdQuery, useLazyGetArticlesQuery } = articlesApi;
+export const {useRemoveArticleMutation,  useGetArticlesQuery, useGetArticleByIdQuery, useAddArticleMutation, useLazyGetArticleByIdQuery, useLazyGetArticlesQuery, useUpdateArticleMutation } = articlesApi;
