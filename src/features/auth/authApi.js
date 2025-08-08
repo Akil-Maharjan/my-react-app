@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { baseUrl } from './app/apiUrl';
 
 // Recommended: Use environment variables for base URL
 
@@ -6,7 +7,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: import.meta.env.VITE_API_BASE_URL,
+    baseUrl: baseUrl,
     // Global headers configuration
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
