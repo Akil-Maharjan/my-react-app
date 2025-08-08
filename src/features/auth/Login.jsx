@@ -35,18 +35,29 @@ export default function Login() {
             initialValues={{ email: '', password: '' }}
             validationSchema={LoginSchema}
             onSubmit={async (values, { setSubmitting }) => {
-              try {
-                const response = await loginUser(values).unwrap();
-                dispatch(setUser(response));
-                toast.success('Login successful');
-                navigate('/');
-              } catch (err) {
-                console.error('Login error:', err);
-                toast.error(err.data?.message || 'Login failed');
-              } finally {
-                setSubmitting(false);
-              }
-            }}
+  try {
+    const response = await loginUser({
+      email: values.email,
+      password: values.password
+    }).unwrap();
+    
+    // Store both token and user data
+    localStorage.setItem('token', response.token);
+    dispatch(setUser({
+  token: response.token,
+  user: response.user
+}));
+    
+    toast.success('Login successful');
+    navigate('/');
+  } catch (err) {
+    console.error('Login error:', err);
+    toast.error(err.data?.error || 'Login failed'); // Match backend error key
+  } finally {
+    setSubmitting(false);
+  }
+}
+            }
           >
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">

@@ -1,12 +1,13 @@
 import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Input, Button, Card, CardBody, CardFooter, Typography } from '@material-tailwind/react';
 import toast from 'react-hot-toast';
 import { useRegisterUserMutation } from './authApi';
+import { useDispatch } from 'react-redux';
+import { setUser } from './authSlice'; // Make sure this import matches your actual auth slice
 
-// Validation Schema using Yup
 const RegisterSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
   email: Yup.string().email('Invalid email address').required('Email is required'),
@@ -14,6 +15,8 @@ const RegisterSchema = Yup.object().shape({
 });
 
 export default function Register() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [registerUser] = useRegisterUserMutation();
   
   return (
@@ -29,11 +32,21 @@ export default function Register() {
             onSubmit={async (values, { setSubmitting }) => {
               try {
                 const response = await registerUser(values).unwrap();
-                console.log("Success:", response);
-                toast.success("Registration successful!");
+                
+                // Dispatch the user data to Redux store
+                dispatch(setUser({
+  token: response.token,
+  user: response.user
+}));
+                
+                // Store token in localStorage
+                localStorage.setItem('token', response.token);
+                
+                toast.success('Registration successful!');
+                navigate('/');
               } catch (err) {
                 console.error("Registration error:", err);
-                toast.error(err.data?.message || "Registration failed");
+                toast.error(err.data?.error || "Registration failed");
               } finally {
                 setSubmitting(false);
               }
