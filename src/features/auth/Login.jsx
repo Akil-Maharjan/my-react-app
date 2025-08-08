@@ -34,30 +34,28 @@ export default function Login() {
           <Formik
             initialValues={{ email: '', password: '' }}
             validationSchema={LoginSchema}
-            onSubmit={async (values, { setSubmitting }) => {
+           onSubmit={async (values, { setSubmitting }) => {
   try {
-    const response = await loginUser({
-      email: values.email,
-      password: values.password
-    }).unwrap();
+    const response = await loginUser(values).unwrap();
     
-    // Store both token and user data
+    // Store token securely
     localStorage.setItem('token', response.token);
-    dispatch(setUser({
-  token: response.token,
-  user: response.user
-}));
+    dispatch(setUser(response.user));
     
-    toast.success('Login successful');
+    // Redirect
     navigate('/');
+    toast.success('Login successful');
   } catch (err) {
-    console.error('Login error:', err);
-    toast.error(err.data?.error || 'Login failed'); // Match backend error key
+    console.error('Login failed:', err);
+    toast.error(
+      err.data?.message || 
+      err.error || 
+      'Connection failed. Try again later.'
+    );
   } finally {
     setSubmitting(false);
   }
-}
-            }
+}}
           >
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">

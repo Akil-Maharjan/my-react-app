@@ -30,27 +30,27 @@ export default function Register() {
             initialValues={{ username: '', email: '', password: '' }}
             validationSchema={RegisterSchema}
             onSubmit={async (values, { setSubmitting }) => {
-              try {
-                const response = await registerUser(values).unwrap();
-                
-                // Dispatch the user data to Redux store
-                dispatch(setUser({
-  token: response.token,
-  user: response.user
-}));
-                
-                // Store token in localStorage
-                localStorage.setItem('token', response.token);
-                
-                toast.success('Registration successful!');
-                navigate('/');
-              } catch (err) {
-                console.error("Registration error:", err);
-                toast.error(err.data?.error || "Registration failed");
-              } finally {
-                setSubmitting(false);
-              }
-            }}
+  try {
+    const response = await registerUser(values).unwrap();
+    
+    // Store token securely
+    localStorage.setItem('token', response.token);
+    dispatch(setUser(response.user));
+    
+    // Redirect
+    navigate('/');
+    toast.success('Login successful');
+  } catch (err) {
+    console.error('Login failed:', err);
+    toast.error(
+      err.data?.message || 
+      err.error || 
+      'Connection failed. Try again later.'
+    );
+  } finally {
+    setSubmitting(false);
+  }
+}}
           >
             {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">

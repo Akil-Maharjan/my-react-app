@@ -12,7 +12,7 @@ export const authApi = createApi({
     prepareHeaders: (headers) => {
       headers.set('Content-Type', 'application/json');
       // Add this for CORS preflight
-      headers.set('Access-Control-Allow-Origin', import.meta.env.VITE_API_BASE_URL);
+      headers.set('Accept', 'application/json');
       return headers;
     }
   }),
@@ -22,14 +22,28 @@ export const authApi = createApi({
         url: '/users/login',
         method: 'POST',
         body: data
-      })
+      }),
+      transformResponse: (response) => response,
+      transformErrorResponse: (response) => {
+        return {
+          status: response.status,
+          data: response.data?.error || 'Login failed'
+        }
+      }
     }),
     registerUser: builder.mutation({
       query: (data) => ({
         url: '/users/register',
         method: 'POST',
         body: data
-      })
+      }),
+      transformResponse: (response) => response,
+      transformErrorResponse: (response) => {
+        return {
+          status: response.status,
+          data: response.data?.error || 'registration failed'
+        }
+      }
     })
   })
 });
