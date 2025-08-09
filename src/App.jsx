@@ -67,11 +67,11 @@ function App() {
           },
           {
             index : true,
-            path: '/api/users/login',
+            path: 'login',
             element: <Login />
           },
           {
-            path: '/api/users/register',
+            path: 'register',
             element: <Register />
           },
          
