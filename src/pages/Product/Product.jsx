@@ -5,7 +5,8 @@ function Product() {
 
     const products = async () => {
         try{
-         const response =  await axios.get('http://localhost:5000/')
+         const response =  await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/products`)
+
              return response.data;
         }
         catch(error){

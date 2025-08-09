@@ -20,7 +20,7 @@ export default function Login() {
   const [loginUser] = useLoginUserMutation();
 
   if (isAuthenticated) {
-    navigate(<Header />); // Redirect if already logged in
+    navigate('/'); // Redirect if already logged in
     return null;
   }
 
