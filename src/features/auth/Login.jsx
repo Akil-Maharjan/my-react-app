@@ -40,7 +40,8 @@ export default function Login() {
     
     // Store token securely
     localStorage.setItem('token', response.token);
-    dispatch(setUser(response.user));
+    // In your login mutation success handler
+dispatch(setUser({ token: response.data.token, user: response.data.user }));
     
     // Redirect
     navigate('/');

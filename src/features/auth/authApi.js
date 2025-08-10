@@ -9,29 +9,34 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: 'https://react-backend-topaz.vercel.app/api', // Add /api prefix
-    credentials: 'include', // For cookies if using sessions
-    prepareHeaders: (headers) => {
+    baseUrl: 'https://react-backend-topaz.vercel.app/api',
+    credentials: 'include',
+    
+    // Add prepareHeaders here ▼
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth.token;
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`);
+      }
       headers.set('Content-Type', 'application/json');
-      // Add this for CORS preflight
-      headers.set('Accept', 'application/json');
       return headers;
     }
+
     
   }),
   endpoints: (builder) => ({
     loginUser: builder.mutation({
-      query: (data) => {
-        const body = JSON.stringify({
-          email: data.email,
+      query: (data) => ({
+        url: '/users/login',
+        method: 'POST',
+        body:{
+          email: data.email.trim(),
           password: data.password
-        });
-        return {
-          url: '/users/login',
-          method: 'POST',
-          body
-        };
-      },
+        },
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }),
       transformResponse: (response) => response,
       transformErrorResponse: (response) => {
         return {
@@ -41,18 +46,18 @@ export const authApi = createApi({
       }
     }),
     registerUser: builder.mutation({
-      query: (data) => {
-        const body = JSON.stringify({
-          username: data.username,
-          email: data.email,
+      query: (data) => ({
+        url: '/users/register',
+        method: 'POST',
+        body: {
+          username: data.username.trim(),
+          email: data.email.trim(),
           password: data.password
-        });
-        return {
-          url: '/users/register',
-          method: 'POST',
-          body
-        };
-      },
+        },
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }),
       transformResponse: (response) => response,
       transformErrorResponse: (response) => {
         return {
