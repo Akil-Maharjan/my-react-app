@@ -21,11 +21,17 @@ export const authApi = createApi({
   }),
   endpoints: (builder) => ({
     loginUser: builder.mutation({
-      query: (data) => ({
-        url: '/users/login',
-        method: 'POST',
-        body: data
-      }),
+      query: (data) => {
+        const body = JSON.stringify({
+          email: data.email,
+          password: data.password
+        });
+        return {
+          url: '/users/login',
+          method: 'POST',
+          body
+        };
+      },
       transformResponse: (response) => response,
       transformErrorResponse: (response) => {
         return {
@@ -35,11 +41,18 @@ export const authApi = createApi({
       }
     }),
     registerUser: builder.mutation({
-      query: (data) => ({
-        url: '/users/register',
-        method: 'POST',
-        body: data
-      }),
+      query: (data) => {
+        const body = JSON.stringify({
+          username: data.username,
+          email: data.email,
+          password: data.password
+        });
+        return {
+          url: '/users/register',
+          method: 'POST',
+          body
+        };
+      },
       transformResponse: (response) => response,
       transformErrorResponse: (response) => {
         return {
