@@ -17,7 +17,7 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isAuthenticated = useSelector(selectIsAuthenticated);
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, ] = useLoginUserMutation();
 
   if (isAuthenticated) {
     navigate('/'); // Redirect if already logged in
