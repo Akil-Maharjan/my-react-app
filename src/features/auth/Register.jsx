@@ -4,9 +4,9 @@ import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import { Input, Button, Card, CardBody, CardFooter, Typography } from '@material-tailwind/react';
 import toast from 'react-hot-toast';
-import { useRegisterUserMutation } from './authApi';
+import { useRegisterUserMutation } from './authApi.js';
 import { useDispatch } from 'react-redux';
-import { setUser } from './authSlice'; // Make sure this import matches your actual auth slice
+import { setUser } from './authSlice.js'; // Make sure this import matches your actual auth slice
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -32,17 +32,18 @@ export default function Register() {
             onSubmit={async (values, { setSubmitting }) => {
   try {
     const response = await registerUser(values).unwrap();
-    
+    toast.success('Register successful');
+     navigate('/login');
     // Store token securely
     localStorage.setItem('token', response.token);
     // In your login mutation success handler
 dispatch(setUser({ token: response.token, user: response.user }));
     
     // Redirect
-    navigate('/');
-    toast.success('Login successful');
+   
+    
   } catch (err) {
-    console.error('Login failed:', err);
+    console.error('Register failed:', err);
     toast.error(
       err.data?.message || 
       err.error || 

@@ -1,15 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-
  // Load environment variables
-
+import { baseUrl } from '../../app/apiUrl';
 // Recommended: Use environment variables for base URL
 
 
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: 'https://react-backend-topaz.vercel.app/api',
+    baseUrl:  baseUrl,
     credentials: 'include',
     
     // Add prepareHeaders here ▼

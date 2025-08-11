@@ -2,9 +2,9 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Link, useNavigate } from 'react-router-dom';
 import { Input, Button, Card, CardBody, CardFooter, Typography } from '@material-tailwind/react';
-import { useLoginUserMutation } from './authApi';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser, selectIsAuthenticated } from './authSlice';
+import { useLoginUserMutation } from './authApi.js';
+import { useDispatch } from 'react-redux';
+import { setUser} from './authSlice.js';
 import toast from 'react-hot-toast';
 import Header from '../../components/Header';
 
@@ -16,14 +16,10 @@ const LoginSchema = Yup.object().shape({
 export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+ 
   const [loginUser, ] = useLoginUserMutation();
 
-  if (isAuthenticated) {
-    navigate('/'); // Redirect if already logged in
-    return null;
-  }
-
+ 
   return (
     <div className='flex justify-center items-center h-full p-5'>
       <Card className="w-96">

@@ -15,6 +15,7 @@ function Header() {
     dispatch(clearUser());
     navigate('/login');
     toast.success('Logged out successfully');
+    setIsMenuOpen(false); // Close menu on logout
   };
 
   const getNavLinkClass = ({ isActive }) =>
@@ -47,6 +48,26 @@ function Header() {
       <div className='container mx-auto flex justify-between items-center'>
         <h1 className='text-2xl font-bold'>My Application</h1>
 
+        {/* Hamburger for mobile */}
+        <button
+          className="md:hidden flex items-center px-2 py-1 border rounded text-white border-white"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            {isMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+
         {/* Desktop Navigation */}
         <nav className='hidden md:flex'>
           <ul className='flex items-center space-x-6'>
@@ -55,8 +76,8 @@ function Header() {
           </ul>
         </nav>
 
-        {/* Auth Buttons - This part is correct */}
-        <div className="flex items-center gap-2">
+        {/* Auth Buttons */}
+        <div className="hidden md:flex items-center gap-2">
           {isAuthenticated ? (
             <Button 
               color="white" 
@@ -80,7 +101,7 @@ function Header() {
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <nav className="md:hidden mt-4">
+        <nav className="md:hidden mt-4 bg-black px-4 py-2 rounded shadow-lg">
           <ul className='flex flex-col items-center space-y-4'>
             {commonLinks}
             {authLinks}
@@ -116,3 +137,4 @@ function Header() {
 }
 
 export default Header;
+// ...existing code...
