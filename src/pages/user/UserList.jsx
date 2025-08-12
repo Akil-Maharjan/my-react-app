@@ -5,7 +5,7 @@ import { deleteUser } from './userSlice'
 import { useNavigate } from 'react-router'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-
+import {selectAllUsers} from './userSlice'
 function ReadMore({ text, maxLength = 80 }) {
   const [expanded, setExpanded] = useState(false)
   if (!text) return null
@@ -24,8 +24,10 @@ function ReadMore({ text, maxLength = 80 }) {
   )
 }
 
+
+
 function UserList() {
-  const users = useSelector((state) => state.user.users)
+  const users = useSelector(selectAllUsers) || [];
   const dispatch = useDispatch()
   const navigate = useNavigate()
 

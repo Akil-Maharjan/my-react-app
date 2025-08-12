@@ -7,11 +7,15 @@ import * as Yup from 'yup'
 import { addUser, updateUser } from './userSlice';
 import { nanoid } from '@reduxjs/toolkit';
 
+// components/UserForm.jsx
+import { selectAllUsers } from './userSlice'
+
 function UserForm() {
+  const users = useSelector(selectAllUsers) || [];
   const dispatch = useDispatch();
   const nav = useNavigate();
   const { idx } = useParams();
-  const users = useSelector((state) => state.user.users);
+  
 
   
   const editingUser = users.find((u) => u.idx === idx);

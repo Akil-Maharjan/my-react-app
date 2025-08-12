@@ -1,9 +1,13 @@
+// features/auth/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { setAuthToLocal, getAuthFromLocal, clearAuthFromLocal } from './local/local';
 
 const initialState = {
-  user: null,
-  token: null,  // Added token storage
-  isAuthenticated: false
+  user: getAuthFromLocal()?.user || null,
+  token: getAuthFromLocal()?.token || null,
+  isAuthenticated: !!getAuthFromLocal(),
+  isLoading: false,
+  error: null
 };
 
 export const authSlice = createSlice({
@@ -11,24 +15,34 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      // Expecting payload format: { token, user }
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.isAuthenticated = true;
+      state.error = null;
+      setAuthToLocal(action.payload);
     },
     clearUser: (state) => {
       state.user = null;
-      state.token = null;  // Clear token too
+      state.token = null;
       state.isAuthenticated = false;
+      clearAuthFromLocal();
+    },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
     }
   }
 });
 
 // Selectors
-export const selectAuth = (state) => state.auth || initialState;
-export const selectIsAuthenticated = (state) => (state.auth || initialState).isAuthenticated;
-export const selectCurrentUser = (state) => (state.auth || initialState).user;
-export const selectToken = (state) => (state.auth || initialState).token;  // New token selector
+export const selectAuth = (state) => state.auth;
+export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
+export const selectCurrentUser = (state) => state.auth.user;
+export const selectToken = (state) => state.auth.token;
+export const selectAuthLoading = (state) => state.auth.isLoading;
+export const selectAuthError = (state) => state.auth.error;
 
-export const { setUser, clearUser } = authSlice.actions;
+export const { setUser, clearUser, setLoading, setError } = authSlice.actions;
 export default authSlice.reducer;
